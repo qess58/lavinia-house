@@ -129,13 +129,14 @@ textarea.inp{min-height:110px;resize:vertical}
 .slayt>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease}
 .slayt>img.on{opacity:1}
 .slayt.bos{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#F1ECF8 0%,#EDE6DA 100%)}
-.slayt.bos>img{position:static;width:min(46%,240px);height:auto;opacity:1}
+.slayt.bos>img{position:static;width:min(46%,240px);height:auto;opacity:1;animation:logo-don 30s linear infinite}
+@keyframes logo-don{to{transform:rotate(360deg)}}
 .slayt-alt{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:2px;background:rgba(28,31,30,.42);backdrop-filter:blur(6px);border-radius:999px;padding:2px 6px}
 .slayt-alt button{border:0;background:none;cursor:pointer;color:#fff;width:24px;height:24px;display:flex;align-items:center;justify-content:center;padding:0;border-radius:999px}
 .slayt-alt .nk::before{content:"";width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.55);transition:width .25s,background .25s}
 .slayt-alt .nk[aria-current=true]::before{width:18px;background:#fff}
 .slayt-alt button:focus-visible{outline:2px solid #fff;outline-offset:1px}
-@media (prefers-reduced-motion:reduce){.slayt>img,.slayt-alt .nk::before{transition:none}}
+@media (prefers-reduced-motion:reduce){.slayt>img,.slayt-alt .nk::before{transition:none}.slayt.bos>img{animation:none}}
 .cat .ph.foto{padding:0;overflow:hidden}
 .cat .ph.foto img{width:100%;height:100%;object-fit:cover;display:block}
 .cat{display:flex;flex-direction:column;gap:12px;text-decoration:none;color:#1C1F1E}
