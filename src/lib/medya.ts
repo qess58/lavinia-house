@@ -4,6 +4,16 @@ import { randomBytes } from "node:crypto";
 import { dosyaBul, dosyaSil, dosyaYaz } from "./depo";
 const AZAMI = 15 * 1024 * 1024;
 
+/** Panelden yüklenen görsellerin klasörleri ve en uzun kenar (px). */
+export const GORSEL_KLASORLERI = { urun: 1600, onay: 2000, anasayfa: 2000, kategori: 1200 } as const;
+export type GorselKlasoru = keyof typeof GORSEL_KLASORLERI;
+export const gorselKlasoruMu = (k: unknown): k is GorselKlasoru => typeof k === "string" && Object.hasOwn(GORSEL_KLASORLERI, k);
+/** Panelden yüklenmiş bir görselin adresi mi? (ör. /medya/anasayfa/<20 hex>.webp) */
+export const medyaYoluMu = (yol: string, klasor?: GorselKlasoru) => {
+  const m = yol.match(/^\/medya\/([a-z]+)\/[a-f0-9]{20}\.(webp|jpg|png)$/);
+  return !!m && gorselKlasoruMu(m[1]) && (!klasor || m[1] === klasor);
+};
+
 function turBul(b: Buffer): "jpg" | "png" | "webp" | null {
   if (b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff) return "jpg";
   if (b.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return "png";
@@ -12,7 +22,7 @@ function turBul(b: Buffer): "jpg" | "png" | "webp" | null {
 }
 
 /** Görseli doğrular, büyükse küçültür (WebP) ve kaydeder. Dönen yol sayfalarda doğrudan kullanılır. */
-export async function gorselKaydet(dosya: File, klasor: "urun" | "onay"): Promise<{ yol: string } | { hata: string }> {
+export async function gorselKaydet(dosya: File, klasor: GorselKlasoru): Promise<{ yol: string } | { hata: string }> {
   if (dosya.size === 0) return { hata: "Dosya boş." };
   if (dosya.size > AZAMI) return { hata: "Görsel 15 MB'tan büyük olamaz." };
   const ham = Buffer.from(await dosya.arrayBuffer());
@@ -25,7 +35,7 @@ export async function gorselKaydet(dosya: File, klasor: "urun" | "onay"): Promis
     const sharp = (await import("sharp")).default;
     cikti = await sharp(ham)
       .rotate()
-      .resize({ width: klasor === "urun" ? 1600 : 2000, height: klasor === "urun" ? 1600 : 2000, fit: "inside", withoutEnlargement: true })
+      .resize({ width: GORSEL_KLASORLERI[klasor], height: GORSEL_KLASORLERI[klasor], fit: "inside", withoutEnlargement: true })
       .webp({ quality: 82 })
       .toBuffer();
     uzanti = "webp";
@@ -38,8 +48,8 @@ export async function gorselKaydet(dosya: File, klasor: "urun" | "onay"): Promis
 }
 
 export async function gorselSil(yol: string) {
-  const m = yol.match(/^\/medya\/(urun|onay)\/([a-f0-9]{20}\.(webp|jpg|png))$/);
-  if (!m) return;
+  const m = yol.match(/^\/medya\/([a-z]+)\/([a-f0-9]{20}\.(webp|jpg|png))$/);
+  if (!m || !gorselKlasoruMu(m[1])) return;
   await dosyaSil(`medya/${m[1]}/${m[2]}`);
 }
 

@@ -85,6 +85,15 @@ export async function hazirlikDurumu(): Promise<{ gruplar: Grup[]; eksik: number
           "uyari",
         ),
         m(
+          a.anasayfaGorselleri.length > 0,
+          "Ana sayfa fotoğrafları",
+          "Ana sayfanın üst bölümünde henüz fotoğraf yok; yerinde logo görünüyor. Ürün ya da atölye fotoğraflarınızı ekleyin.",
+          `${a.anasayfaGorselleri.length} fotoğraf, ${a.slaytSuresi} saniyede bir değişiyor`,
+          "/yonetim/anasayfa",
+          "Ana sayfa ayarları",
+          "uyari",
+        ),
+        m(
           ornekUrunler.length === 0 && ornekYorum === 0 && ornekSiparis === 0,
           "Örnek veriler",
           [ornekUrunler.length && `${ornekUrunler.length} örnek ürün`, ornekYorum && `${ornekYorum} örnek yorum`, ornekSiparis && "örnek sipariş #1052"].filter(Boolean).join(", ") + " duruyor. Satmadığınız örnek ürünleri Ürünler’den silin; örnek yorum ve siparişi aşağıdaki düğmeyle temizleyebilirsiniz.",

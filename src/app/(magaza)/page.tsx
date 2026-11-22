@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { urunler as urunTablosu, yorumlar } from "@/db/schema";
 import { magazaAyarlari, magazaKategorileri, yayindakiUrunler } from "@/lib/veri";
 import { OneCikanlar } from "@/components/OneCikanlar";
+import { AnaSlayt } from "@/components/AnaSlayt";
 import { jsonLd, kurulusVerisi } from "@/lib/seo";
 import { para } from "@/lib/bicim";
 import { GozIkon, InstagramIkon, KalkanIkon, KamyonIkon, MesajIkon, TikIkon } from "@/components/Ikonlar";
@@ -55,18 +56,7 @@ export default async function AnaSayfa() {
           </ul>
         </div>
         <div className="vis">
-          <div className="ph" style={{ aspectRatio: "5 / 4", borderRadius: 28, fontSize: 15 }}>Ana görsel: ürün veya atölye fotoğrafı (1600 × 1280)</div>
-          <div className="float" aria-hidden="true">
-            <svg viewBox="0 0 120 80" style={{ width: 96, flex: "0 0 auto", borderRadius: 10, background: "#F3EEE6" }}>
-              <rect x="8" y="8" width="104" height="64" rx="8" fill="#D9B98C" stroke="#B08A5B" strokeWidth="1.5" />
-              <text x="60" y="46" textAnchor="middle" fontFamily="Great Vibes, cursive" fontSize="20" fill="#3B2A17">Yılmaz Ailesi</text>
-            </svg>
-            <div>
-              <p style={{ fontWeight: 700, fontSize: 15 }}>Tasarımınız hazır</p>
-              <p className="xs mut">Onaylayınca üretime başlıyoruz</p>
-              <span className="pill" style={{ marginTop: 6, background: "#DFF3E3", color: "#166534" }}>Onaylandı</span>
-            </div>
-          </div>
+          <AnaSlayt gorseller={ayarlar.anasayfaGorselleri} sure={ayarlar.slaytSuresi} />
         </div>
       </section>
 
@@ -89,17 +79,35 @@ export default async function AnaSayfa() {
           <Link className="btn s" href="/urunler">Tüm ürünler</Link>
         </div>
         <div className="grid kats">
-          {kategoriler.map((k) => (
+          {kategoriler.map((k) => {
+            // Kategori fotoğrafı yoksa o kategorideki ilk fotoğraflı ürün kullanılır; o da yoksa yalnızca renk.
+            const foto = k.gorsel ? { yol: k.gorsel, alt: k.ad } : urunler.find((u) => u.kategoriSlug === k.slug && u.gorsel)?.gorsel ?? null;
+            return (
             <Link key={k.id} className="cat" href={`/urunler?kategori=${k.slug}`}>
-              <span className="ph" style={{ background: k.renk }}>Kategori görseli</span>
+              {foto ? (
+                <span className="ph foto" style={{ background: k.renk }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={foto.yol} alt="" loading="lazy" decoding="async" />
+                </span>
+              ) : (
+                <span className="ph" style={{ background: k.renk }} aria-hidden="true" />
+              )}
               <span style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
                 <span className="hd" style={{ fontWeight: 700, fontSize: 19 }}>{k.ad}</span>
                 <span className="sm mut">{k.urunSayisi} ürün</span>
               </span>
             </Link>
-          ))}
+            );
+          })}
           <Link className="cat" href="/teklif?tur=kurumsal">
-            <span className="ph" style={{ background: "#DCE6EE" }}>Kategori görseli</span>
+            {ayarlar.kurumsalGorsel ? (
+              <span className="ph foto" style={{ background: "#DCE6EE" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={ayarlar.kurumsalGorsel} alt="" loading="lazy" decoding="async" />
+              </span>
+            ) : (
+              <span className="ph" style={{ background: "#DCE6EE" }} aria-hidden="true" />
+            )}
             <span style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10 }}>
               <span className="hd" style={{ fontWeight: 700, fontSize: 19 }}>Kurumsal</span>
               <span className="sm mut">Teklif ile</span>

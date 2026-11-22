@@ -49,6 +49,12 @@ export type MagazaAyarlari = {
   onlineSatis: boolean;
   /** Vitrin modunda fiyatlar gösterilsin mi? */
   fiyatGoster: boolean;
+  /** Ana sayfanın üst bölümünde sırayla değişen fotoğraflar. */
+  anasayfaGorselleri: Gorsel[];
+  /** Fotoğrafların değişme aralığı (saniye). */
+  slaytSuresi: number;
+  /** Ana sayfadaki "Kurumsal" kartının fotoğrafı. */
+  kurumsalGorsel: string;
   fontlar: { ad: string; aile: string }[];
 };
 
@@ -74,6 +80,9 @@ export const VARSAYILAN_AYARLAR: MagazaAyarlari = {
   calismaSaatleri: "Hafta içi 09:00–18:00",
   onlineSatis: false,
   fiyatGoster: true,
+  anasayfaGorselleri: [],
+  slaytSuresi: 5,
+  kurumsalGorsel: "",
   fontlar: [
     { ad: "Great Vibes", aile: "'Great Vibes', cursive" },
     { ad: "Montserrat", aile: "Montserrat, sans-serif" },

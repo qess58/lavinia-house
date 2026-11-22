@@ -124,7 +124,20 @@ textarea.inp{min-height:110px;resize:vertical}
 .hero .vis{flex:1 1 420px;min-width:0;position:relative}
 .chk{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 22px}
 .chk li{display:flex;gap:8px;align-items:center;font-weight:600;font-size:15px}
-.float{position:absolute;left:-24px;bottom:-24px;background:#fff;border:1px solid #E7E4DE;border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.14);padding:14px;display:flex;gap:12px;align-items:center;width:min(330px,90%)}
+/* Ana sayfa slaytı: fotoğraflar üst üste durur, sıradaki yumuşakça belirir */
+.slayt{position:relative;aspect-ratio:5/4;border-radius:28px;overflow:hidden;background:#EDE6DA}
+.slayt>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease}
+.slayt>img.on{opacity:1}
+.slayt.bos{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#F1ECF8 0%,#EDE6DA 100%)}
+.slayt.bos>img{position:static;width:min(46%,240px);height:auto;opacity:1}
+.slayt-alt{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:2px;background:rgba(28,31,30,.42);backdrop-filter:blur(6px);border-radius:999px;padding:2px 6px}
+.slayt-alt button{border:0;background:none;cursor:pointer;color:#fff;width:24px;height:24px;display:flex;align-items:center;justify-content:center;padding:0;border-radius:999px}
+.slayt-alt .nk::before{content:"";width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.55);transition:width .25s,background .25s}
+.slayt-alt .nk[aria-current=true]::before{width:18px;background:#fff}
+.slayt-alt button:focus-visible{outline:2px solid #fff;outline-offset:1px}
+@media (prefers-reduced-motion:reduce){.slayt>img,.slayt-alt .nk::before{transition:none}}
+.cat .ph.foto{padding:0;overflow:hidden}
+.cat .ph.foto img{width:100%;height:100%;object-fit:cover;display:block}
 .cat{display:flex;flex-direction:column;gap:12px;text-decoration:none;color:#1C1F1E}
 .cat:hover{color:#1C1F1E}
 .cat:hover .ph{outline:3px solid #4A2E85;outline-offset:-3px}
@@ -268,7 +281,6 @@ textarea.inp{min-height:110px;resize:vertical}
 .st3 .n{width:32px;height:32px;border-radius:50%;background:#1C1F1E;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .prose{max-width:760px;display:flex;flex-direction:column;gap:14px;font-size:17px}
 .prose h2{font-size:22px;margin-top:10px}
-@media (max-width:860px){.float{left:12px;bottom:-20px}}
 @media (max-width:640px){.trk{grid-template-columns:repeat(1,minmax(0,1fr))}.thumbs{grid-template-columns:repeat(4,minmax(0,1fr))}}
 /* ---------- Etsy tarzı liste: üst filtre çubuğu + soldan açılan panel ---------- */
 .fbar{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid #E7E4DE;flex-wrap:wrap}

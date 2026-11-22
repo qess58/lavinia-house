@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { kategoriler, urunler } from "@/db/schema";
 import { yoneticiGerekli } from "@/lib/yetki";
 import { kategoriEkle, kategoriGuncelle, kategoriMenuDegistir, kategoriSil, kategoriTasi } from "../../eylemler";
+import { TekGorsel } from "../TekGorsel";
 
 export const metadata: Metadata = { title: "Kategoriler" };
 
@@ -109,6 +110,10 @@ export default async function KategorilerSayfasi({ searchParams }: { searchParam
                                 <label className="y-lbl" htmlFor={`ac-${k.id}`}>Kısa açıklama</label>
                                 <textarea id={`ac-${k.id}`} className="y-inp" name="aciklama" defaultValue={k.aciklama} maxLength={300} style={{ minHeight: 70 }} />
                               </div>
+                              <div>
+                                <p className="y-lbl">Ana sayfa kart fotoğrafı</p>
+                                <TekGorsel ad="gorsel" klasor="kategori" mevcut={k.gorsel} aciklama="Fotoğraf eklenmezse bu kategorideki ilk fotoğraflı ürün, o da yoksa kart rengi kullanılır." />
+                              </div>
                               <div className="y-row" style={{ gap: 18 }}>
                                 <label className="y-ck">
                                   <input type="color" name="renk" defaultValue={k.renk} aria-label="Kart rengi" />
@@ -167,6 +172,10 @@ export default async function KategorilerSayfasi({ searchParams }: { searchParam
               <label className="y-lbl" htmlFor="y-ac">Kısa açıklama (isteğe bağlı)</label>
               <textarea id="y-ac" className="y-inp" name="aciklama" maxLength={300} style={{ minHeight: 70 }} />
             </div>
+            <div>
+              <p className="y-lbl">Kart fotoğrafı (isteğe bağlı)</p>
+              <TekGorsel ad="gorsel" klasor="kategori" mevcut={null} />
+            </div>
             <div className="y-row" style={{ gap: 18 }}>
               <label className="y-ck">
                 <input type="color" name="renk" defaultValue="#EDE6DA" aria-label="Kart rengi" />
@@ -181,7 +190,7 @@ export default async function KategorilerSayfasi({ searchParams }: { searchParam
           </form>
           <div className="y-note">
             <b>Nasıl görünür?</b> “Menüde göster” açık olan kategoriler üst menüde, alt bilgide ve ana sayfada yer alır. İçinde yayında ürün olan her
-            kategori ürün listesindeki “Kategori” seçim kutusunda çıkar. Ürünlerin kategorisi, sıradaki adımda gelecek ürün düzenleme ekranından seçilecek.
+            kategori ürün listesindeki “Kategori” seçim kutusunda çıkar. Ürünlerin kategorisi ürün düzenleme ekranından seçilir.
           </div>
         </aside>
       </div>

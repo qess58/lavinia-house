@@ -9,6 +9,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import { kategoriler, urunler, yoneticiler } from "@/db/schema";
 import { slugify } from "@/lib/bicim";
+import { gorselSil, medyaYoluMu } from "@/lib/medya";
 import {
   denemeleriSifirla,
   girisEngelli,
@@ -131,6 +132,12 @@ async function bosSlug(taban: string, haricId?: number) {
   return `${kokSlug}-${Date.now()}`;
 }
 
+/** Formdaki kategori fotoğrafı (yalnızca panelden yüklenmiş kategori görselleri kabul edilir). */
+function kategoriGorseli(f: FormData) {
+  const y = String(f.get("gorsel") ?? "");
+  return medyaYoluMu(y, "kategori") ? y : null;
+}
+
 export async function kategoriEkle(f: FormData) {
   await yoneticiGerekli();
   const s = KategoriSemasi.safeParse(alanlar(f));
@@ -143,6 +150,7 @@ export async function kategoriEkle(f: FormData) {
     slug: await bosSlug(slugify(v.ad)),
     aciklama: v.aciklama,
     renk: v.renk,
+    gorsel: kategoriGorseli(f),
     menude: v.menude === "on",
     sira: (enCok ?? 0) + 1,
   });
@@ -160,7 +168,11 @@ export async function kategoriGuncelle(f: FormData) {
   if ((await bosSlug(slug, id!)) !== slug) git(`hata=slug-var&ac=${id}`);
   const v = s.data!;
   const d = await db();
-  await d.update(kategoriler).set({ ad: v.ad, slug, aciklama: v.aciklama, renk: v.renk, menude: v.menude === "on" }).where(eq(kategoriler.id, id!));
+  const [eski] = await d.select({ gorsel: kategoriler.gorsel }).from(kategoriler).where(eq(kategoriler.id, id!));
+  if (!eski) git("hata=yok");
+  const gorsel = kategoriGorseli(f);
+  await d.update(kategoriler).set({ ad: v.ad, slug, aciklama: v.aciklama, renk: v.renk, gorsel, menude: v.menude === "on" }).where(eq(kategoriler.id, id!));
+  if (eski.gorsel && eski.gorsel !== gorsel) await gorselSil(eski.gorsel).catch(() => {});
   yenile();
   git("ok=kaydedildi");
 }
@@ -202,11 +214,13 @@ export async function kategoriSil(f: FormData) {
     const [h] = await d.select({ id: kategoriler.id }).from(kategoriler).where(eq(kategoriler.id, hedef));
     if (!h) git("hata=yok");
   }
+  const [silinen] = await d.select({ gorsel: kategoriler.gorsel }).from(kategoriler).where(eq(kategoriler.id, id!));
   await d.transaction(async (tx) => {
     await tx.update(urunler).set({ kategoriId: hedef }).where(eq(urunler.kategoriId, id!));
     await tx.update(kategoriler).set({ ustId: null }).where(eq(kategoriler.ustId, id!));
     await tx.delete(kategoriler).where(eq(kategoriler.id, id!));
   });
+  if (silinen?.gorsel) await gorselSil(silinen.gorsel).catch(() => {});
   yenile();
   git("ok=silindi");
 }

@@ -14,6 +14,7 @@ const BOLUMLER: { href: string; ad: string; sayi?: keyof MenuSayilari }[] = [
   { href: "/yonetim/kuponlar", ad: "Kuponlar" },
   { href: "/yonetim/yorumlar", ad: "Yorumlar", sayi: "yorumlar" },
   { href: "/yonetim/raporlar", ad: "Raporlar" },
+  { href: "/yonetim/anasayfa", ad: "Ana sayfa" },
   { href: "/yonetim/sayfalar", ad: "Sayfalar" },
   { href: "/yonetim/ayarlar", ad: "Ayarlar" },
   { href: "/yonetim/hazirlik", ad: "Yayına hazırlık", sayi: "hazirlik" },
