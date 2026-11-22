@@ -78,7 +78,9 @@ Güvenlik açısından önemli: **fiyatlar her siparişte sunucuda veritabanınd
 
 ## Vercel'e yayınlama
 
-Klasördeki **`vercel-yayinla.bat`** dosyasına çift tıklayın. Pencere sırayla şunları yapar:
+Site **GitHub'daki `qess58/lavinia-house` deposuna** bağlı Vercel projesinde (`lavinia-house`) çalışır. Depodaki `main` dalına yüklenen her değişiklik Vercel'de otomatik olarak derlenip yayınlanır; ayrıca bir şey yapmanız gerekmez.
+
+Yedek yol olarak klasördeki **`vercel-yayinla.bat`** ile bilgisayardan da yayınlanabilir. Pencere sırayla şunları yapar:
 
 1. Vercel aracını (Vercel CLI) kurar ve Vercel hesabınıza girişi ister (tarayıcıda onaylarsınız).
 2. Klasörü `lavinia-house` adlı Vercel projesine bağlar (ilk seferde projeyi oluşturur).

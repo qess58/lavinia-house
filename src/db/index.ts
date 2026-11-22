@@ -75,7 +75,9 @@ async function baslat(): Promise<Db> {
     const { drizzle } = await import("drizzle-orm/node-postgres");
     const { migrate } = await import("drizzle-orm/node-postgres/migrator");
     const yerel = /localhost|127\.0\.0\.1/.test(url);
-    const pool = new Pool({ connectionString: url, ssl: yerel ? undefined : { rejectUnauthorized: false }, max: 5, idleTimeoutMillis: 10_000 });
+    // Neon adresleri sslmode=require ile gelir; pg bunu zaten verify-full sayar ve her açılışta uyarı yazar.
+    const adres = url.replace(/([?&]sslmode=)(require|prefer|verify-ca)\b/, "$1verify-full");
+    const pool = new Pool({ connectionString: adres, ssl: yerel ? undefined : { rejectUnauthorized: false }, max: 5, idleTimeoutMillis: 10_000 });
     const d = drizzle(pool, { schema });
     if (calisirkenGoc()) await migrate(d, { migrationsFolder: goclerKlasoru() });
     // Boş canlı veritabanı: mağaza ayarları, kategoriler ve malzemeler bir kez yüklenir.
