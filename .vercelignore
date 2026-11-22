@@ -1,0 +1,11 @@
+# Vercel'e yüklenmeyecek dosyalar (yerel veritabanı, yüklemeler, gizli ayarlar)
+node_modules
+.next
+.veri
+.vercel
+.env
+.env.*
+!.env.example
+*.bat
+AGENTS.md
+npm-debug.log*

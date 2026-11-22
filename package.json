@@ -1,0 +1,45 @@
+{
+  "name": "lavinia-house",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "node scripts/goc.mjs && next build",
+    "start": "next start",
+    "db:push": "drizzle-kit push",
+    "db:seed": "tsx scripts/seed.ts",
+    "typecheck": "tsc --noEmit",
+    "db:migrate": "node scripts/goc.mjs"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.17",
+    "@fontsource/great-vibes": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/montserrat": "^5.3.0",
+    "@fontsource/pacifico": "^5.3.0",
+    "@fontsource/playfair-display": "^5.3.0",
+    "@fontsource/plus-jakarta-sans": "^5.3.0",
+    "@vercel/blob": "^2.9.0",
+    "drizzle-orm": "^0.45.4",
+    "next": "^16.4.6",
+    "nodemailer": "^10.6.1",
+    "pg": "^8.23.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "sharp": "^0.35.5",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/nodemailer": "^8.0.2",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "drizzle-kit": "^0.31.11",
+    "tsx": "^4.23.15",
+    "typescript": "~5.9"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
